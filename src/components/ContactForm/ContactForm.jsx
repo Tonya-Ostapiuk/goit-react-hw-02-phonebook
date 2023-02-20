@@ -1,6 +1,6 @@
 import propTypes from 'prop-types';
-import React, { Component } from 'react';
-import css from './ContactForm.module.css';
+import { Component } from "react";
+import { FormStyled, LabelStyled, InputStyled, BtnStyled } from './ContactForm.styled'
 
 export class ContactForm extends Component {
   state = {
@@ -8,52 +8,49 @@ export class ContactForm extends Component {
     number: '',
   };
 
-  handleChange = e => {
-    const { name, value } = e.target;
+  handleSubmit = (evt) => {
+    evt.preventDefault();
+    this.props.handleSubmit(this.state);
+    this.setState({name: "", number: ""});
+  };
+
+  handleChange = (evt) => {
+    const { name, value } = evt.target;
     this.setState({ [name]: value });
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
-    const form = e.currentTarget;
-    this.props.handleSubmit(this.state);
-    form.reset();
-  };
-
   render() {
-    const { name, number } = this.state;
-
     return (
-      <form className={css.form} onSubmit={this.handleSubmit}>
-        <label>
+      <FormStyled onSubmit={this.handleSubmit}>
+        <LabelStyled>
           Name
-          <input
+          <InputStyled
             type="text"
             name="name"
             pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
             title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
             required
-            placeholder="Enter name"
-            value={name}
+            placeholder="Name"
+            value={this.state.name}
             onChange={this.handleChange}
           />
-        </label>
-        <label>
+        </LabelStyled>
+        <LabelStyled>
           Number
-          <input
+          <InputStyled
             type="tel"
             name="number"
             pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
             title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
             required
-            placeholder="Enter phone number"
-            value={number}
+            placeholder="Phone number"
+            value={this.state.number}
             onChange={this.handleChange}
           />
-        </label>
+        </LabelStyled>
 
-        <button type="submit">Add contact</button>
-      </form>
+        <BtnStyled type="submit">Add contact</BtnStyled>
+      </FormStyled>
     );
   }
 }

@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
+import { Component } from "react";
 import { nanoid } from 'nanoid';
 import { ContactForm } from './ContactForm/ContactForm';
 import { Filter } from './Filter/Filter';
 import { ContactList } from './ContactList/ContactList';
+import { H1Styled, H2Styled } from './App.styled';
 
 export class App extends Component {
   state = {
@@ -13,19 +14,17 @@ export class App extends Component {
       { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: '',
-    name: '',
-    number: '',
   };
 
-  handleChange = e => {
-    const { name, value } = e.target;
+  handleChange = (evt) => {
+    const { name, value } = evt.target;
     this.setState({ [name]: value });
   };
 
-  handleSubmit = e => {
+  handleSubmit = evt => {
     const id = nanoid();
-    const name = e.name;
-    const number = e.number;
+    const name = evt.name;
+    const number = evt.number;
     const contactsLists = [...this.state.contacts];
 
     if (contactsLists.findIndex(contact => name === contact.name) !== -1) {
@@ -37,10 +36,10 @@ export class App extends Component {
     this.setState({ contacts: contactsLists });
   };
 
-  handleDelete = e => {
-    this.setState(prevState => ({
-      contacts: prevState.contacts.filter(contact => contact.id !== e),
-    }));
+  contactDelete = (id) => {
+    this.setState((prevState) => {
+      return{ contacts: prevState.contacts.filter((contact) => contact.id !== id) };
+    });
   };
 
   getFilteredContacts = () => {
@@ -57,24 +56,14 @@ export class App extends Component {
     const { filter } = this.state;
 
     return (
-      <div
-        style={{
-          height: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          fontSize: 20,
-          color: '#010101',
-        }}
-      >
-        <h1>Phonebook</h1>
+      <div>
+        <H1Styled>Phonebook</H1Styled>
         <ContactForm handleSubmit={this.handleSubmit} />
-        <h2> Contacts</h2>
+        <H2Styled> Contacts</H2Styled>
         <Filter filter={filter} handleChange={this.handleChange} />
         <ContactList
           contacts={this.getFilteredContacts()}
-          handleDelete={this.handleDelete}
+          contactDelete={this.contactDelete}
         />
       </div>
     );
