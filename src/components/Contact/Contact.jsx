@@ -1,5 +1,6 @@
 
 import { LiStyled, BtnStyled } from './Contact.styled'
+import propTypes from 'prop-types';
 
 export function Contact({ contact, contactDelete }) {
   return (
@@ -11,3 +12,16 @@ export function Contact({ contact, contactDelete }) {
     </LiStyled>
   )
 }
+
+Contact.propTypes = {
+  contact: propTypes.arrayOf(
+    propTypes.exact({
+      id: propTypes.string.isRequired,
+      name: propTypes.string.isRequired,
+      number: propTypes.string.isRequired,
+    })
+  ),
+  
+  contactDelete: propTypes.func.isRequired,
+
+};
